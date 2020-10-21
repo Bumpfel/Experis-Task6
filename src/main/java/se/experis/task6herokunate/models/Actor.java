@@ -10,36 +10,34 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 @Entity
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Actor {
 
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    public Integer id;
-    
-    @Column(nullable = false)
-    public String firstName;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  public Integer id;
 
-    @Column(nullable = false)
-    public String lastName;
+  @Column(nullable = false)
+  public String firstName;
 
-    @Column(nullable = false)
-    public String dateOfBirth;
+  @Column(nullable = false)
+  public String lastName;
 
-    @Column(nullable = false)
-    public String imdbUrl;
+  @Column(nullable = false)
+  public String dateOfBirth;
 
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        for(var field : getClass().getDeclaredFields()) {
-            try {
-                builder.append(field.getName() + ": " + field.get(this) + "\n");
-            } catch(Exception e) {
-            }
-        }
-        return builder.toString();
+  @Column(nullable = false)
+  public String imdbUrl;
+
+  @Override
+  public String toString() {
+    StringBuilder builder = new StringBuilder();
+    for (var field : getClass().getDeclaredFields()) {
+      try {
+        builder.append(field.getName() + ": " + field.get(this) + "\n");
+      } catch (Exception e) {
+      }
     }
+    return builder.toString();
+  }
 }

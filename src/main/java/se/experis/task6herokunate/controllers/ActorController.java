@@ -2,7 +2,6 @@ package se.experis.task6herokunate.controllers;
 
 import java.util.List;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import se.experis.task6herokunate.models.Actor;
 import se.experis.task6herokunate.repositories.ActorRepository;
+import se.experis.task6herokunate.utils.Tools;
 
 @RestController
 @RequestMapping(path = "/api/v1")
@@ -73,7 +73,7 @@ public class ActorController {
     if(actorRepository.existsById(id)) {
       var actor = actorRepository.findById(id).get();
       
-      updateFields(actor, newActor, updateAllFields);
+      Tools.updateFields(actor, newActor, updateAllFields);
 
       actorRepository.save(actor);
       httpStatus = HttpStatus.OK;
@@ -83,32 +83,6 @@ public class ActorController {
     
     return new ResponseEntity<>(httpStatus);
   }
-  
-  
-  /**
-   * Update the fields of original object based on newObject (yay reflection)
-   * @param original
-   * @param newObject
-   * @throws RuntimeException if objects are of different types
-   */
-  private void updateFields(Object original, Object newObject, boolean updateNullFields) throws RuntimeException {
-    if(original.getClass() != newObject.getClass()) {
-      throw new RuntimeException("Objects are not of the same type");
-    }
-
-    var fields = Actor.class.getDeclaredFields();
-    for(var field : fields) {
-      try {
-        var fieldValue = field.get(newObject);
-        if(updateNullFields || fieldValue != null) {
-          field.set(original, fieldValue);
-        }          
-      } catch(Exception e) {
-        System.err.println("Error");
-      }
-    }
-  }
-  
 
   @DeleteMapping("/actors/{id}")
   public ResponseEntity<Boolean> removeActor(@PathVariable("id") int id) {
