@@ -1,0 +1,40 @@
+body {
+  background-color: #aba;
+  margin: 0;
+}
+
+#menu {
+  display: flex;
+  background-color: #333;
+  white-space: nowrap;
+}
+
+#menu a {
+  color: white;
+  text-decoration: none;
+  padding: 10px 15px;
+}
+
+#menu a:hover {
+  background-color: #666;
+}
+
+main {
+  margin: 20px;
+}
+
+main .container {
+  display: flex;
+}
+
+form > div {
+  display: inline-block;
+  width: 100px;
+  margin-bottom: 10px;
+}
+
+.card {
+  border: 1px solid black;
+  padding: 20px 30px;
+  background-color: #ded;
+}

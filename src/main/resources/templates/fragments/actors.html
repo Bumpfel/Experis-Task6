@@ -1,0 +1,4 @@
+<a class="card" th:each="actor : ${actors}">
+  <div th:text="${actor.firstName} + ' ' + ${actor.lastName}"></div>
+  <div th:text="${actor.dateOfBirth}"></div>
+</a>
