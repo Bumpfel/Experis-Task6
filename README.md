@@ -22,4 +22,4 @@ Body: String firstName?, String lastName?, String dateOfBirth?, String imdbUrl?
 
 # How to run
 * Run main method in src/main/java/se/experis/Task6HerokunateApplication.java
-* Set up a [https://www.postgresql.org/](postgreSQL server) on port 5432
+* Set up a [PostgreSQL server](https://www.postgresql.org) on port 5432
