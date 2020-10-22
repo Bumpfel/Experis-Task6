@@ -18,9 +18,8 @@ public class Tools {
         var fieldValue = field.get(newObject);
         if(updateNullFields || fieldValue != null) {
           field.set(original, fieldValue);
-        }          
+        }
       } catch(Exception e) {
-        System.err.println("Error");
         return false;
       }
     }
