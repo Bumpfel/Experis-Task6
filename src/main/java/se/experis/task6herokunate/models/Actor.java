@@ -26,7 +26,7 @@ public class Actor {
   @Column(nullable = false)
   public String dateOfBirth;
 
-  @Column(nullable = false)
+  @Column(nullable = false, unique = true)
   public String imdbUrl;
 
   @Override

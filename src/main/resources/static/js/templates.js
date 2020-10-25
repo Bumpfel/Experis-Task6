@@ -23,17 +23,17 @@ addActorTemplate.innerHTML = `
   <input type="text" name="imdbUrl" autocomplete="off">
   <br>
 
-  <button type="submit">Create</button>
+  <button type="submit" id="createButton">Submit</button>
+  <button type="reset" id="deleteButton">Delete</button>
 </form>
 `
 
 export const actorCard = (actor) => {
   const card = document.createElement('a')
-  card.href = "#"
-  card.target = '_blank'
   card.classList.add('card')
   card.id = 'actor' + actor.id
   card.setAttribute('data-id', actor.id)
+  card.href = '#'
   
   const functions = document.createElement('div')
   functions.classList.add('functions')
@@ -49,9 +49,10 @@ export const actorCard = (actor) => {
   const row1 = document.createElement('div')
   row1.textContent = actor.firstName + ' ' + actor.lastName
   const row2 = document.createElement('div')
+  row2.classList.add('small')
   row2.textContent = actor.dateOfBirth
-  
-  card.appendChild(functions)
+
+  // card.appendChild(functions)
   card.appendChild(row1)
   card.appendChild(row2)
   return card

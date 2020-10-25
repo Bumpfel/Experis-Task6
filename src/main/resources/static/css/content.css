@@ -25,16 +25,28 @@ a {
 }
 
 .functions {
-  text-align: right;
 }
 
 .messages {
   position: absolute;
-  left: 100px;
-  width: 300px;
+  width: 400px;
   bottom: 0;
-
+  
   text-align: center;
+}
+
+.messages .error {
+  color: red;
+}
+
+
+.messages div {
+  padding: 5px;
   border: 1px solid black;
+  border-radius: 5px;
   background-color: white;
+}
+
+.small {
+  font-size: 12px;
 }

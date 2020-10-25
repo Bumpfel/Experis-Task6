@@ -1,6 +1,6 @@
 import { addActorTemplate, listActorsTemplate, actorCard } from './templates.js'
 
-const host = 'http://localhost:8080'
+const host = location.protocol + '//' + location.hostname + ':' + location.port
 const api = '/api/v1'
 const msgTimeout = 5000
 
@@ -20,7 +20,7 @@ msgContainer.classList.add('messages')
 
 class ActorApp extends window.HTMLElement {
   constructor () {
-    super()
+    super()  
 
     this.attachShadow({ mode: 'open' })
     this.shadowRoot.appendChild(styleSheet)
@@ -51,30 +51,24 @@ class ActorApp extends window.HTMLElement {
   async _showAllActors () {
     this._clearPage()
 
-    contentContainer.addEventListener('click', e => {
-      if(e.target.nodeName === 'I') {
-        const actor = e.target.parentElement.parentElement.parentElement
-        if(e.target.id === 'deleteActor') {
-          this._deleteActor(actor.getAttribute('data-id'))
-        } else if(e.target.id === 'editActor') {
-          this._showEditActor(actor.getAttribute('data-id'))
-        }
-      }
-    })
-
     const response = await fetch(host + api + '/actors')
+   
     if(response.ok) {
-      const actors = await response.json()
-      if(actors) {
+      const result = await response.text()
+      if(result) {
+        const actors = JSON.parse(result)
         for(const actor of actors) {
           const card = actorCard(actor)
           contentContainer.appendChild(card)
+          card.addEventListener('click', e => {
+            this._showEditActor(actor.id)
+          })
         }
       } else {
         contentContainer.textContent = 'No actors found'
       }
     } else {
-      this._addMsg('Could not fetch actors. Dno why')
+      this._addMsg('Could not fetch actors')
     }
   }
 
@@ -83,9 +77,10 @@ class ActorApp extends window.HTMLElement {
 
     contentContainer.appendChild(addActorTemplate.content.cloneNode(true))
     const form = contentContainer.querySelector('#addActorForm')
+    form.querySelector('#deleteButton').remove()
     form.querySelector('input').focus() // focus first input
 
-    let actor = {}  
+    let actor = {} 
 
     form.addEventListener('submit', async e => {
       e.preventDefault()
@@ -100,8 +95,9 @@ class ActorApp extends window.HTMLElement {
       
       if(response.ok) {
         form.reset()
+        actor = {}
         form.querySelector('input').focus()
-        this._addMsg('Actor added')
+        this._addMsg('Actor added', false)
       } else {
         this._addMsg('Could not add actor. Make sure the mandatory fields are filled in')
       }
@@ -109,11 +105,14 @@ class ActorApp extends window.HTMLElement {
   }
 
   async _showEditActor(id) {
-    this._clearPage()
-
+    this._clearPage()  
+    
     contentContainer.appendChild(addActorTemplate.content.cloneNode(true))
     const form = contentContainer.querySelector('#addActorForm')
-    
+    form.querySelector('#deleteButton').addEventListener('click', e => {
+      this._deleteActor(id)
+    })
+
     for(const input of form.querySelectorAll('input')) {
       input.setAttribute('disabled', '')
     }
@@ -144,7 +143,7 @@ class ActorApp extends window.HTMLElement {
       response = await this._editActor(actor, id)
       
       if(response.ok) {
-        this._addMsg('Actor edited')
+        this._addMsg('Actor edited', false)
         this._showAllActors()
       } else {
         if(response.status / 100 === 4) {
@@ -185,12 +184,15 @@ class ActorApp extends window.HTMLElement {
       method: 'DELETE'
     })
     if(response.ok) {
-      contentContainer.querySelector('#actor' + id).remove()
+      this._showAllActors()
     }
   }
 
-  _addMsg(msg) {
+  _addMsg(msg, isErroneous = true) {
     const line = document.createElement('div')
+    if(isErroneous) {
+      line.classList.add('error')
+    }
     line.textContent = msg
     msgContainer.appendChild(line)
     setTimeout(() => {
