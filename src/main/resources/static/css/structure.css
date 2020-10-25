@@ -1,0 +1,25 @@
+body {
+  background-color: #aba;
+  margin: 0;
+}
+
+#menu {
+  display: flex;
+  background-color: #333;
+  white-space: nowrap;
+  user-select: none;
+}
+
+#menu a {
+  color: white;
+  text-decoration: none;
+  padding: 10px 15px;
+}
+
+#menu a:hover {
+  background-color: #666;
+}
+
+main {
+  margin: 20px;
+}
