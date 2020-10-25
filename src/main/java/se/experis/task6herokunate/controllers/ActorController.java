@@ -59,10 +59,15 @@ public class ActorController {
   
   @PostMapping("/actors")
   public ResponseEntity<Boolean> addActor(HttpServletRequest request, @RequestBody Actor actor) {
-    var httpStatus = actorRepository.save(actor) != null
+    HttpStatus httpStatus;
+    try {
+      httpStatus = actorRepository.save(actor) != null
       ? HttpStatus.CREATED
       : HttpStatus.BAD_REQUEST;
-    
+    } catch (Exception e) { // some values were null or body empty
+      httpStatus = HttpStatus.BAD_REQUEST;
+    }
+      
     logger.log(request, httpStatus);
     return new ResponseEntity<>(httpStatus);
   }
@@ -88,9 +93,13 @@ public class ActorController {
       var actor = actorRepository.findById(id).get();
       
       Tools.updateFields(actor, newActor, updateAllFields);
-
-      actorRepository.save(actor);
-      httpStatus = HttpStatus.OK;
+      
+      try {
+        actorRepository.save(actor);
+        httpStatus = HttpStatus.OK;
+      } catch(Exception e) {
+        httpStatus = HttpStatus.BAD_REQUEST;
+      }
     } else {
       httpStatus = HttpStatus.NOT_FOUND;
     }

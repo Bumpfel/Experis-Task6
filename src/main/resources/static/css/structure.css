@@ -7,6 +7,7 @@ body {
   display: flex;
   background-color: #333;
   white-space: nowrap;
+  user-select: none;
 }
 
 #menu a {
